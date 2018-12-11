@@ -3,6 +3,8 @@ Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
 2009, 2010, 2011, 2012, 2013, 2014, 2015
 <josh.macdonald@gmail.com>
 
+[![Build Status](https://devdiv.visualstudio.com/DevDiv/_apis/build/status/dellis1972.xdelta?branchName=release3_0_apl)](https://devdiv.visualstudio.com/DevDiv/_build/latest?definitionId=11610&branchName=release3_0_apl)
+
 
 Thanks for downloading Xdelta!
 

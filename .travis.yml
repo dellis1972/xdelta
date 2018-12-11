@@ -1,0 +1,22 @@
+language: c
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode10.2
+      env: HOSTOS=Darwin
+    - os: linux
+      env: HOSTOS=Linux
+addons:
+  homebrew:
+    packages:
+    - ninja
+    - mingw-w64
+    update: true
+  apt:
+    packages:
+    - ninja-build
+    update: true
+script:
+- cd xdelta3
+- ./build_native
+- find * | grep xdelta

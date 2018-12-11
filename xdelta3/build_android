@@ -1,0 +1,47 @@
+#!/bin/bash -e
+set -x
+ANDROID_NDK_API_32BIT=14
+ANDROID_NDK_API_64BIT=21
+ANDROID_SDK_DIRECTORY=$ANDROID_HOME
+if [ -z "$ANDROID_SDK_DIRECTORY" ]; then
+    ANDROID_SDK_DIRECTORY="$HOME/android-toolchain-xa/sdk"
+fi
+find $ANDROID_SDK_DIRECTORY | grep android.toolchain.cmake
+find $ANDROID_SDK_DIRECTORY | grep sdkmanager
+$ANDROID_SDK_DIRECTORY/tools/bin/sdkmanager ndk-bundle "cmake;3.10.2.4988404"
+ANDROID_NDK_DIRECTORY="$ANDROID_SDK_DIRECTORY/ndk-bundle"
+CMAKE_DIRECTORY="$ANDROID_SDK_DIRECTORY/cmake/3.10.2.4988404"
+CMAKE="$CMAKE_DIRECTORY/bin/cmake"
+NINJA="$CMAKE_DIRECTORY/bin/ninja"
+
+ARCHITECTURES_32="x86 armeabi-v7a"
+ARCHITECTURES_64="arm64-v8a x86_64"
+
+echo ${NINJA}
+
+CMAKE_FLAGS_ANDROID="-GNinja \
+           -DENABLE_NDK=ON
+           -DCMAKE_MAKE_PROGRAM=${NINJA} \
+           -DANDROID_TOOLCHAIN=clang \
+           -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_DIRECTORY}/build/cmake/android.toolchain.cmake \
+           -DANDROID_NDK=${ANDROID_NDK_DIRECTORY} \
+           -DCMAKE_BUILD_TYPE=Debug"
+
+for ARCH in $ARCHITECTURES_32; do
+    install -d -m 755 android_bld/$ARCH
+    cd android_bld/$ARCH
+    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_32BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_32BIT ../..
+    ${NINJA}
+    cd ../..
+done
+
+for ARCH in $ARCHITECTURES_64; do
+    install -d -m 755 android_bld/$ARCH
+    cd android_bld/$ARCH
+    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_64BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_64BIT ../..
+    ${NINJA}
+    cd ../..
+done
+
+cd android_bld
+7z a $OUTPUT/xdelta-3.0-android.7z x86/xdelta3 x86_64/xdelta3 arm64-v8a/xdelta3 armeabi-v7a/xdelta3 

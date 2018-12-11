@@ -1,0 +1,69 @@
+jobs:
+- job: BuildMac
+  displayName: Build MacOS, Windows and Android
+  pool:
+    vmImage: xcode9-macos10.13
+  steps:
+  - script: |
+      brew tap xamarin/xamarin-android-windeps
+      brew upgrade https://raw.githubusercontent.com/Homebrew/homebrew-core/a6542037a48a55061a4c319e6bb174b3715f7cbe/Formula/mingw-w64.rb
+      brew install mingw-w64
+      brew install ninja xamarin/xamarin-android-windeps/mingw-zlib p7zip
+    displayName: 'Install Tools'
+  - bash: |
+      cd xdelta3
+      ./build_native
+    displayName: 'Build Darwin'
+  - bash: |
+      cd xdelta3
+      ./build_windows
+    displayName: 'Build Windows'
+  - bash: |
+      cd xdelta3
+      ./build_android
+    displayName: 'Build Android'
+    env:
+      OUTPUT: $(Build.ArtifactStagingDirectory)
+  - task: ArchiveFiles@2
+    displayName: 'Archive MacOS'
+    inputs:
+      rootFolderOrFile: xdelta3/build/Darwin/xdelta3
+      includeRootFolder: false 
+      archiveType: 7z
+      archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-macos.7z
+  - task: ArchiveFiles@2
+    displayName: 'Archive Windows'
+    inputs:
+      rootFolderOrFile: xdelta3/build/Windows/64/xdelta3.exe
+      includeRootFolder: false 
+      archiveType: 7z
+      archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-windows.7z
+  - task: PublishBuildArtifacts@1
+    displayName: upload artifacts
+    inputs:
+      artifactName: xdelta3
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
+- job: BuildLinux
+  displayName: Build Linux
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  steps:
+  - script: |
+      sudo apt -y update
+      sudo apt install ninja-build -y
+    displayName: 'Install Tools'
+  - bash: |
+      cd xdelta3
+      ./build_native
+    displayName: 'Build Linux'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: xdelta3/build/Linux/xdelta3
+      includeRootFolder: false 
+      archiveType: 7z
+      archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-linux.7z
+  - task: PublishBuildArtifacts@1
+    displayName: upload artifacts
+    inputs:
+      artifactName: xdelta3
+      pathtoPublish: $(Build.ArtifactStagingDirectory)

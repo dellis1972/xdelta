@@ -1,0 +1,10 @@
+#!/bin/bash -e
+if [ -z "$HOSTOS" ]; then
+    HOSTOS=$(uname)
+fi
+install -d -m 755 build/$HOSTOS
+cd build/$HOSTOS
+cmake -GNinja -DCMAKE_MAKE_PROGRAM=ninja -DXD3_POSIX=1 -DXD3_USE_LARGEFILE64=1 ../..
+ninja
+cd ../..
+find * | grep xdelta

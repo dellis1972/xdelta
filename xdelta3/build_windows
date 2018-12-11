@@ -1,0 +1,6 @@
+#!/bin/bash -e
+install -d -m 755 build/Windows/64
+cd build/Windows/64
+cmake -GNinja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_TOOLCHAIN_FILE=../../../mingw-64.cmake ../../..
+ninja
+cd ../../..
