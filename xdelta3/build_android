@@ -28,20 +28,20 @@ CMAKE_FLAGS_ANDROID="-GNinja \
            -DCMAKE_BUILD_TYPE=Debug"
 
 for ARCH in $ARCHITECTURES_32; do
-    install -d -m 755 android_bld/$ARCH
-    cd android_bld/$ARCH
-    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_32BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_32BIT ../..
+    install -d -m 755 build/Android/$ARCH
+    cd build/Android/$ARCH
+    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_32BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_32BIT ../../..
     ${NINJA}
-    cd ../..
+    cd ../../..
 done
 
 for ARCH in $ARCHITECTURES_64; do
-    install -d -m 755 android_bld/$ARCH
-    cd android_bld/$ARCH
-    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_64BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_64BIT ../..
+    install -d -m 755 build/Android/$ARCH
+    cd build/Android/$ARCH
+    ${CMAKE} $CMAKE_FLAGS_ANDROID -DANDROID_ABI=$ARCH -DANDROID_NATIVE_API_LEVEL=$ANDROID_NDK_API_64BIT -DANDROID_PLATFORM=android-$ANDROID_NDK_API_64BIT ../../..
     ${NINJA}
-    cd ../..
+    cd ../../..
 done
 
-cd android_bld
+cd build/Android
 7z a $OUTPUT/xdelta-3.0-android.7z x86/xdelta3 x86_64/xdelta3 arm64-v8a/xdelta3 armeabi-v7a/xdelta3 

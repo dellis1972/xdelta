@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>xdelta.native</id>
+    <version>3.0.11</version>
+    <title>xdelta.native</title>
+    <authors>Dean Ellis</authors>
+    <owners>Microsoft, Xamarin</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/dellis1972/xdelta/master/xdelta3/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/dellis1972/xdelta</projectUrl>
+    <description>Native exe's for xdelta3 (http://xdelta.org)</description>
+    <summary>Native platform exe's for xdelta3 binary compression tool (http://xdelta.org).</summary>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (c) 2016 Dean Ellis.</copyright>
+    <language></language>
+  </metadata>
+  <files>
+    <file src="build\Darwin\xdelta3" target="build/Darwin/xdelta3" />
+    <file src="build\Windows\64\xdelta3.exe" target="build/Windows/xdelta3.exe" />
+    <file src="build\Linux\xdelta3" target="build/Linux/xdelta3" />
+    <file src="build\Android\x86\xdelta3" target="build/Android/x86/xdelta3" />
+    <file src="build\Android\x86_64\xdelta3" target="build/Android/x86_64/xdelta3" />
+    <file src="build\Android\armeabi-v7a\xdelta3" target="build/Android/armeabi-v7a/xdelta3" />
+    <file src="build\Android\arm64-v8a\xdelta3" target="build/Android/arm64-v8a/xdelta3" />
+    <file src="xdelta.native.targets" target="build/xdelta.native.targets" />
+  </files>
+</package>

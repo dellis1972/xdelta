@@ -67,3 +67,55 @@ jobs:
     inputs:
       artifactName: xdelta3
       pathtoPublish: $(Build.ArtifactStagingDirectory)
+- job: BuildNuget
+  displayName: 'Build Nuget'
+  dependsOn:
+  - BuildLinux
+  - BuildMac 
+  pool:
+    vmImage: xcode9-macos10.13
+  steps:
+    - script: |
+        brew install p7zip
+      displayName: 'Install Tools'
+    - task: DownloadBuildArtifacts@0
+      displayName: download artifacts
+      inputs:
+        artifactName: xdelta3
+        downloadPath: $(Build.ArtifactStagingDirectory)
+    - task: ExtractFiles@1
+      displayName: Extract Linux native
+      inputs:
+        archiveFilePatterns: $(Build.ArtifactStagingDirectory)/xdelta3/xdelta-3.0-linux.7z
+        destinationFolder: xdelta3/build/Linux
+    - task: ExtractFiles@1
+      displayName: Extract MacOS Native
+      inputs:
+        archiveFilePatterns: $(Build.ArtifactStagingDirectory)/xdelta3/xdelta-3.0-macos.7z
+        destinationFolder: xdelta3/build/Darwin
+    - task: ExtractFiles@1
+      displayName: Extract Windows Native
+      inputs:
+        archiveFilePatterns: $(Build.ArtifactStagingDirectory)/xdelta3/xdelta-3.0-windows.7z
+        destinationFolder: xdelta3/build/Windows/64
+    - task: ExtractFiles@1
+      displayName: Extract Android Native
+      inputs:
+        archiveFilePatterns: $(Build.ArtifactStagingDirectory)/xdelta3/xdelta-3.0-android.7z
+        destinationFolder: xdelta3/build/Android
+    - task: DeleteFiles@1
+      displayName: Delete archives
+      inputs:
+          sourceFolder: $(Build.ArtifactStagingDirectory)
+          contents: 'xdelta3'
+    - task: NuGetCommand@2
+      displayName: package nuget
+      inputs:
+        command: custom
+        arguments: pack xdelta3/xdelta.nuspec -OutputDirectory $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      displayName: upload artifacts
+      inputs:
+        artifactName: 'nuget'
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+
