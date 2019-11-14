@@ -4,3 +4,8 @@ cd build/Windows/64
 cmake -GNinja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_TOOLCHAIN_FILE=../../../mingw-64.cmake ../../..
 ninja
 cd ../../..
+install -d -m 755 build/Windows/32
+cd build/Windows/32
+cmake -GNinja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_TOOLCHAIN_FILE=../../../mingw-32.cmake ../../..
+ninja
+cd ../../..
