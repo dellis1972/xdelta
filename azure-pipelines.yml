@@ -68,7 +68,7 @@ jobs:
       artifactName: xdelta3
       pathtoPublish: $(Build.ArtifactStagingDirectory)
 - job: BuildWindows
-  displayName" 'Build Windows'
+  displayName: 'Build Windows'
   pool:
     vmImage: windows-2019
   steps:
