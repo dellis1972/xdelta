@@ -66,6 +66,7 @@
     <ClInclude Include="xdelta3-second.h" />
     <ClInclude Include="xdelta3-test.h" />
     <ClInclude Include="xdelta3.h" />
+    <ClInclude Include="config.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8F9D37B5-B78E-4816-BE61-AEF679DBF3BC}</ProjectGuid>
