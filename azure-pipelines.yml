@@ -38,11 +38,11 @@ jobs:
   #    rootFolderOrFile: xdelta3/build/Windows/64/xdelta3.exe
   #    archiveType: 7z
   #    archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-windows.7z
-  #- task: PublishBuildArtifacts@1
-  #  displayName: upload artifacts
-  #  inputs:
-  #    artifactName: xdelta3
-  #    pathtoPublish: $(Build.ArtifactStagingDirectory)
+  - task: PublishBuildArtifacts@1
+    displayName: upload artifacts
+    inputs:
+      artifactName: xdelta3
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
 - job: BuildLinux
   displayName: Build Linux
   pool:
