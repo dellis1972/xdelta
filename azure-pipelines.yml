@@ -73,6 +73,7 @@ jobs:
     vmImage: windows-2019
   steps:
   - powershell: .\xdelta3\windowsconfig.ps1
+    workingDirectory: .\xdelta3
     displayName: Configure Build'
   - task: MSBuild@1
     displayName: 'Build Project xdelta3\xdelta3.vcxproj'
