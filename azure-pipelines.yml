@@ -83,6 +83,7 @@ jobs:
     inputs:
       solution: xdelta3\xdelta3.vcxproj
       configuration: xdelta3-64
+      msbuildArguments: /p:Platform=x64
 - job: BuildNuget
   displayName: 'Build Nuget'
   dependsOn:
