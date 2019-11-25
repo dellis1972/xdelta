@@ -1,6 +1,6 @@
 jobs:
 - job: BuildMac
-  displayName: Build MacOS, Windows and Android
+  displayName: Build MacOS and Android
   pool:
     vmImage: xcode9-macos10.13
   steps:
@@ -14,10 +14,10 @@ jobs:
       cd xdelta3
       ./build_native
     displayName: 'Build Darwin'
-  - bash: |
-      cd xdelta3
-      ./build_windows
-    displayName: 'Build Windows'
+  #- bash: |
+  #    cd xdelta3
+  #    ./build_windows
+  #  displayName: 'Build Windows'
   - bash: |
       cd xdelta3
       ./build_android
@@ -31,13 +31,13 @@ jobs:
       includeRootFolder: false 
       archiveType: 7z
       archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-macos.7z
-  - task: ArchiveFiles@2
-    displayName: 'Archive Windows'
-    inputs:
-      rootFolderOrFile: xdelta3/build/Windows/64/xdelta3.exe
-      includeRootFolder: false 
-      archiveType: 7z
-      archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-windows.7z
+  #- task: ArchiveFiles@2
+  #  displayName: 'Archive Windows'
+  #  inputs:
+  #    includeRootFolder: false 
+  #    rootFolderOrFile: xdelta3/build/Windows/64/xdelta3.exe
+  #    archiveType: 7z
+  #    archiveFile: $(Build.ArtifactStagingDirectory)/xdelta-3.0-windows.7z
   - task: PublishBuildArtifacts@1
     displayName: upload artifacts
     inputs:
@@ -67,11 +67,41 @@ jobs:
     inputs:
       artifactName: xdelta3
       pathtoPublish: $(Build.ArtifactStagingDirectory)
+- job: BuildWindows
+  displayName: 'Build Windows'
+  pool:
+    vmImage: windows-2019
+  steps:
+  - task: PowerShell@2
+    displayName: Configure Build'
+    inputs:
+      targetType: filePath
+      filePath: .\xdelta3\windowsconfig.ps1
+      workingDirectory: .\xdelta3
+  - task: MSBuild@1
+    displayName: 'Build Project xdelta3\xdelta3.vcxproj'
+    inputs:
+      solution: xdelta3\xdelta3.vcxproj
+      configuration: xdelta3-64
+      msbuildArguments: /p:Platform=x64
+  - task: ArchiveFiles@2
+    displayName: 'Archive Windows'
+    inputs:
+      rootFolderOrFile: xdelta3\x64\xdelta3-64\xdelta3.exe
+      includeRootFolder: false 
+      archiveType: 7z
+      archiveFile: $(Build.ArtifactStagingDirectory)\xdelta-3.0-windows.7z
+  - task: PublishBuildArtifacts@1
+    displayName: upload artifacts
+    inputs:
+      artifactName: xdelta3
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
 - job: BuildNuget
   displayName: 'Build Nuget'
   dependsOn:
   - BuildLinux
-  - BuildMac 
+  - BuildMac
+  - BuildWindows
   pool:
     vmImage: xcode9-macos10.13
   steps:
