@@ -72,7 +72,7 @@ jobs:
   pool:
     vmImage: windows-2019
   steps:
-  - powershell:
+  - task: PowerShell@2
     targetType: filePath
     filePath: .\xdelta3\windowsconfig.ps1
     workingDirectory: .\xdelta3
